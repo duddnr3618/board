@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.mysite.board.entity.BoardEntity;
+import com.mysite.board.entity.Board;
 import com.mysite.board.service.BoardService;
 
 @Controller
@@ -21,11 +21,17 @@ public class BoardController {
 	}
 	
 	@PostMapping("/board/writepro")
-	public String boardWritePro (BoardEntity boardEntity) {
+	public String boardWritePro (Board board) {
 
-		boardService.wirte(boardEntity);
+		boardService.wirte(board);
 		
 		return "";
+	}
+	
+	@GetMapping("/board/list")
+	public String boardList () {
+		
+		return "boardlist";
 	}
 	
 	
