@@ -1,9 +1,12 @@
 package com.mysite.board.service;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.board.entity.Board;
 import com.mysite.board.repository.BoardRepository;
@@ -15,7 +18,17 @@ public class BoardService {
 	private BoardRepository boardRepository; 
 	
 	// 글 작성 처리
-	public void wirte (Board board) {
+	public void wirte (Board board , MultipartFile file) throws Exception{
+		
+		//프로젝트 경로 담기
+		//저장한 파일 경로 지정
+		String projectPath = System.getProperty("user.dir") + "//src//main//resources//static//files";
+		
+		//파일을 담을 객체생성
+		UUID uuid = UUID.randomUUID();		//식별자를 통해서 랜덤으로 이름을 붙임
+		String fileName = uuid + "_" + file.getOriginalFilename();	//저장될 파일 이름을 생성(식별자_원래이름)
+		File saveFile = new File(projectPath , fileName);
+		file.transferTo(saveFile);
 		
 		boardRepository.save(board);
 	}
@@ -37,5 +50,7 @@ public class BoardService {
 		boardRepository.deleteById(id);
 		
 	}
+	
+	
 	
 }

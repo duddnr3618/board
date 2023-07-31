@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mysite.board.entity.Board;
 import com.mysite.board.service.BoardService;
@@ -25,12 +26,11 @@ public class BoardController {
 	
 	//게시글 작서후 db에 전송 폼
 	@PostMapping("/board/writepro")
-	public String boardWritePro (Board board , Model model) {
+	public String boardWritePro (Board board , Model model , MultipartFile file) throws Exception {
 
-	boardService.wirte(board);
+	boardService.wirte(board , file);
 	
-	
-		model.addAttribute("message" , "글 작성이 완료되었습니다.");
+	model.addAttribute("message" , "글 작성이 완료되었습니다.");
 	
 	//	model.addAttribute("message" , "글 작성이 실패되었습니다.");
 	
@@ -75,7 +75,7 @@ public class BoardController {
 	
 	 // 수정된 내용 업데이트
     @PostMapping("/board/update/{id}")
-    public String boardUpdate(@PathVariable("id") Integer id, Board board) {
+    public String boardUpdate(@PathVariable("id") Integer id, Board board , MultipartFile file) throws Exception {
        //기존 글 검색
     	Board boardToUpdate = boardService.boardView(id);
         
@@ -83,7 +83,7 @@ public class BoardController {
         boardToUpdate.setTitle(board.getTitle());
         boardToUpdate.setContent(board.getContent());
       
-        boardService.wirte(boardToUpdate); // 게시글 업데이트 호출
+        boardService.wirte(boardToUpdate , file); // 게시글 업데이트 호출
         return "redirect:/board/list"; // 수정 후 목록 페이지로 이동
     }
 	
