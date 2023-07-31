@@ -25,12 +25,14 @@ public class BoardController {
 	
 	//게시글 작서후 db에 전송 폼
 	@PostMapping("/board/writepro")
-	public String boardWritePro (Board board) {
+	public String boardWritePro (Board board , Model model) {
 
 	boardService.wirte(board);
-
+	
+	model.addAttribute("message" , "글 작성이 완료되었습니다.");
+	model.addAttribute("searchUrl" , "/board/list");
 		
-		return "";
+		return "message";
 	}
 	
 	//게시물의 리스트에 불러오는 폼
@@ -72,6 +74,7 @@ public class BoardController {
        //기존 글 검색
     	Board boardToUpdate = boardService.boardView(id);
         
+    	//게시글 내용 board에 담아 덮에써 수정하기
         boardToUpdate.setTitle(board.getTitle());
         boardToUpdate.setContent(board.getContent());
       
