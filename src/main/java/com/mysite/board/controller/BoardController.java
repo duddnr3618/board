@@ -1,6 +1,10 @@
 package com.mysite.board.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,10 +45,22 @@ public class BoardController {
 	}
 	
 	//게시물의 리스트에 불러오는 폼
-	@GetMapping("/board/list")
-	public String boardList (Model model) {
+	@GetMapping("/board/list") //http://localhost:8002/board/list?page=0 : 1페이지 
+															//http://localhost:8002/board/list?size=10 : 10개 게시글보여주기
+	public String boardList (Model model , @PageableDefault(page=0 , size = 10 , sort = "id" ,
+	direction = Sort.Direction.DESC) Pageable pageable) {
 		
-		model.addAttribute ("list", boardService.boardList());
+		//페이지 리스트를 만들어서 넣어줌
+		Page<Board> list = boardService.boardList(pageable);
+		int nowPage = list.getPageable().getPageNumber() + 1;	//현재 페이지를 가져오기
+		int startPage = Math.max( nowPage - 4,1);
+		int endPage = Math.min(nowPage + 5,list.getTotalPages());
+		
+		//변수 넘겨주기
+		model.addAttribute ("list", list);
+		model.addAttribute("nowPage" , nowPage);
+		model.addAttribute("startPage" , startPage);
+		model.addAttribute("endPage" , endPage);
 		return "boardlist";
 	}
 	
