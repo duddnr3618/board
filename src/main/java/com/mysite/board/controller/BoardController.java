@@ -47,11 +47,25 @@ public class BoardController {
 	//게시물의 리스트에 불러오는 폼
 	@GetMapping("/board/list") //http://localhost:8002/board/list?page=0 : 1페이지 
 															//http://localhost:8002/board/list?size=10 : 10개 게시글보여주기
-	public String boardList (Model model , @PageableDefault(page=0 , size = 10 , sort = "id" ,
-	direction = Sort.Direction.DESC) Pageable pageable) {
+	public String boardList (Model model , 
+			@PageableDefault(page=0 , size = 10 , sort = "id" ,direction = Sort.Direction.DESC) Pageable pageable,
+			 String searchKeyword) {
+		
+		Page<Board> list = null;
+		
+		//검색 기능	
+		//파라미터를  통한 검색기능	
+			//http://localhost:8002/board/list?searchKeyWord=11 --> 11이 들어간 게시물 출력
+			//http://localhost:8002/board/list?searchKeyWord=11&page=1 -> 두번째 페이지로 이동
+		if(searchKeyword == null) {
+			list =  boardService.boardList(pageable);
+		}else {
+			list = boardService.boardSearchList(searchKeyword,pageable);
+			
+		}
 		
 		//페이지 리스트를 만들어서 넣어줌
-		Page<Board> list = boardService.boardList(pageable);
+		//Page<Board> list = boardService.boardList(pageable); -> 위에서 변수 선언
 		int nowPage = list.getPageable().getPageNumber() + 1;	//현재 페이지를 가져오기
 		int startPage = Math.max( nowPage - 4,1);
 		int endPage = Math.min(nowPage + 5,list.getTotalPages());
