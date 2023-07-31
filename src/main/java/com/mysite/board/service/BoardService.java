@@ -33,7 +33,7 @@ public class BoardService {
 		//DB에 업로드된 파일 경로 저장 
 		board.setFilename(fileName);
 		
-		board.setFilepath("/files" + fileName);
+		board.setFilepath("/files/" + fileName);
 		
 		boardRepository.save(board);
 	}
