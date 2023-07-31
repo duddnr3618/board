@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.mysite.board.entity.Board;
@@ -57,4 +58,25 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 
+	//게시글 수정 폼
+	@GetMapping("/board/modify/{id}")
+	public String boardModify (@PathVariable("id") Integer id , Model model) {
+	
+		model.addAttribute("board" , boardService.boardView(id));
+		return "boardModify";
+	}
+	
+	 // 수정된 내용 업데이트
+    @PostMapping("/board/update/{id}")
+    public String boardUpdate(@PathVariable("id") Integer id, Board board) {
+       //기존 글 검색
+    	Board boardToUpdate = boardService.boardView(id);
+        
+        boardToUpdate.setTitle(board.getTitle());
+        boardToUpdate.setContent(board.getContent());
+      
+        boardService.wirte(boardToUpdate); // 게시글 업데이트 호출
+        return "redirect:/board/list"; // 수정 후 목록 페이지로 이동
+    }
+	
 }
