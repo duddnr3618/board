@@ -30,6 +30,11 @@ public class BoardService {
 		File saveFile = new File(projectPath , fileName);
 		file.transferTo(saveFile);
 		
+		//DB에 업로드된 파일 경로 저장 
+		board.setFilename(fileName);
+		
+		board.setFilepath("/files" + fileName);
+		
 		boardRepository.save(board);
 	}
 	
