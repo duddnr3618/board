@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>게시글 리스트 페이지</title>
+    <meta charset="UTF-8">
+    <title>게시글 리스트 페이지</title>
 </head>
 
 <style>
-		.layout {width: 500px; margin: 0 auto; margin-top: 40px;}	
-
+    .layout {
+        width: 500px;
+        margin: 0 auto;
+        margin-top: 40px;
+    }
 </style>
 
 <body>
 
-<div class = "layout">
-	<table>
-		<th>
-			<tr>
-				<th>글 번호</th>
-				<th>제목</th>
-			</tr>
-		</th>
-		
-		<tb>
-			<tr th:each="board : ${list}">
-				<td th:text="${board.id}">1</td>
-				<td th:text="${board.title}">제목입니다.</td>
-			</tr>
-		</tb>
-	</table>
+<div class="layout">
+    <table>
+        <thead>
+        <tr>
+            <th>글 번호</th>
+            <th>제목</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="board : ${list}">
+            <td th:text="${board.id}">1</td>
+            <!-- board의 id 값을 URL의 파라미터로 넘기면서 게시글 상세 페이지로 이동 -->
+            <td >
+				<a th:text="${board.title}"  th:href="@{/board/view(id=${board.id})}"></a></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 </body>
