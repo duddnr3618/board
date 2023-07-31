@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.mysite.board.entity.Board;
 import com.mysite.board.service.BoardService;
 
-import jakarta.persistence.Id;
-
 @Controller
 public class BoardController {
 	
@@ -48,6 +46,15 @@ public class BoardController {
 		
 		model.addAttribute("board" , boardService.boardView(id));
 		return "boardview";
+	}
+	
+	//게시글 리스트에서 삭제
+	@GetMapping("/board/delete")
+	public String boardDelete (Integer id) {
+	
+		boardService.boardDelete(id);
+		
+		return "redirect:/board/list";
 	}
 
 }
